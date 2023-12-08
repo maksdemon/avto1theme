@@ -418,7 +418,7 @@ $columnNames = array_keys($rowsStartDate[0]);
                             href="https://datatables.net">official DataTables documentation</a>.</p>
 
 
-                    <div class="container">
+
 
                         <div class="header clearfix">
                     <!-- DataTales Example -->
@@ -428,7 +428,7 @@ $columnNames = array_keys($rowsStartDate[0]);
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="table table-bordered iksweb"  width="100%" cellspacing="0">
+                                <table id="example" class="table table-bordered iksweb"  >
                                     <thead>
                                     <tr>
                                         <th>Name</th>
@@ -494,7 +494,7 @@ $columnNames = array_keys($rowsStartDate[0]);
                         </div>
                     </div>
                         </div>
-                    </div>
+
 
                 </div>
                 <!-- /.container-fluid -->
