@@ -483,9 +483,24 @@ $columnNames = array_keys($rowsStartDate[0]);
 
                 </div>
                 <!-- /.container-fluid -->
+                <div class="container">
+                    <canvas id="myChart3" width="600" height="400"
+                            data-prices3="<?php
+                            echo htmlspecialchars(json_encode(array_column($result3, 'avg_price')), ENT_QUOTES, 'UTF-8'); ?>"
+                            data-dates3="<?php
+                            echo htmlspecialchars(json_encode(array_column($result3, 'date_day')), ENT_QUOTES, 'UTF-8'); ?>">
 
+                    </canvas>
+                </div>
+                data-url="update_chart_data.php?name=<?php
+                echo urlencode(isset($_POST['selectedName']) ? $_POST['selectedName'] : $selectedName); ?>"
+                <div class="container">
+
+                </div>
             </div>
             <!-- End of Main Content -->
+
+
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
