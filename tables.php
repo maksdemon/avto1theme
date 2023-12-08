@@ -34,10 +34,9 @@ $columnNames = array_keys($rowsStartDate[0]);
 
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="template/style.css"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <head>
 
     <meta charset="utf-8">
@@ -418,14 +417,18 @@ $columnNames = array_keys($rowsStartDate[0]);
                         For more information about DataTables, please visit the <a target="_blank"
                             href="https://datatables.net">official DataTables documentation</a>.</p>
 
+
+                    <div class="container">
+
+                        <div class="header clearfix">
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4 ">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered iksweb" id="dataTable" width="100%" cellspacing="0" data-page-length="10">
+                                <table id="example" class="table table-bordered iksweb"  width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
                                         <th>Name</th>
@@ -477,23 +480,26 @@ $columnNames = array_keys($rowsStartDate[0]);
                                     endforeach; ?>
                                     </tbody>
                                 </table>
+                                <div class="date-picker">
+                                    <label for="start-date">Начальная дата:</label>
+                                    <input type="date" id="start-date" name="start-date">
+
+                                    <label for="end-date">Конечная дата:</label>
+                                    <input type="date" id="end-date" name="end-date">
+
+                                    <button id="apply-date-range">Применить</button>
+                                </div>
+
                             </div>
+                        </div>
+                    </div>
                         </div>
                     </div>
 
                 </div>
                 <!-- /.container-fluid -->
-                <div class="container">
-                    <canvas id="myChart3" width="600" height="400"
-                            data-prices3="<?php
-                            echo htmlspecialchars(json_encode(array_column($result3, 'avg_price')), ENT_QUOTES, 'UTF-8'); ?>"
-                            data-dates3="<?php
-                            echo htmlspecialchars(json_encode(array_column($result3, 'date_day')), ENT_QUOTES, 'UTF-8'); ?>">
 
-                    </canvas>
-                </div>
-                data-url="update_chart_data.php?name=<?php
-                echo urlencode(isset($_POST['selectedName']) ? $_POST['selectedName'] : $selectedName); ?>"
+
                 <div class="container">
 
                 </div>
