@@ -1,0 +1,155 @@
+table.iksweb {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    height: auto;
+}
+
+table.iksweb, table.iksweb td, table.iksweb th {
+    border: 1px solid #595959;
+}
+
+table.iksweb td, table.iksweb th {
+    padding: 3px;
+    width: 30px;
+    height: 35px;
+}
+
+table.iksweb th {
+    background: #347c99;
+    color: #fff;
+    font-weight: normal;
+}
+
+/* Выделение текущей цены желтым фоном */
+table.iksweb td.current-price {
+    background-color: yellow;
+}
+
+/* Выделение текущей цены зеленым фоном */
+table.iksweb td.min-price {
+    background-color: green;
+}
+
+/* Полужирное начертание для текущей цены меньше предпоследней */
+table.iksweb td.less-than-prev {
+    font-weight: bold;
+}
+
+.green-circle {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+
+}
+
+.red-circle {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+
+}
+
+li:last-child {
+    padding-top: 5px;
+}
+
+
+/* Стили для попапа */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    text-align: center;
+}
+
+.popup-content {
+    background-color: white;
+    max-width: 900px;
+    height: 500px;
+    margin: 20px auto; /* Расположение по центру экрана */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.popup-content p {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.popup-close {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    color: red; /* Красный цвет текста */
+}
+
+
+/* Стили для затемнения экрана */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+/* Стили для контейнера попапа */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Стили для крестика закрытия */
+.popup-close-button {
+    position: absolute;
+    top: 10px;
+    right: 30%; /* Задаем правое положение как 10% от ширины родительского контейнера */
+    cursor: pointer;
+    font-size: 20px;
+    transform: translateX(50%); /* Сдвигаем на половину ширины элемента */
+}
+
+.popup-link img {
+    display: block;
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+}
+
+.url1 {
+    padding-left: 29px;
+
+}
+
+.areas {
+    width: 390px;
+}
