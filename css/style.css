@@ -16,7 +16,7 @@ table.iksweb td, table.iksweb th {
 }
 
 table.iksweb th {
-    background: #347c99;
+    background: #4e73df;
     color: #fff;
     font-weight: normal;
 }
@@ -152,4 +152,9 @@ li:last-child {
 
 .areas {
     width: 390px;
+}
+.custom-select.custom-select-sm.form-control.form-control-sm {
+    /* Твои стили здесь */
+    width: 50px; /* Пример: устанавливаем ширину в 150 пикселей */
+    /* Добавь другие стили, если необходимо */
 }

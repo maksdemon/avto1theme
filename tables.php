@@ -493,9 +493,10 @@ $columnNames = array_keys($rowsStartDate[0]);
 
                             </div>
                         </div>
-                    </div>
-                        </div>
 
+
+                        </div>
+                </div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -513,7 +514,7 @@ $columnNames = array_keys($rowsStartDate[0]);
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Your Website <?php echo date("Y"); ?></span>
                     </div>
                 </div>
             </footer>
@@ -570,17 +571,25 @@ $columnNames = array_keys($rowsStartDate[0]);
 </body>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable(
-            {
-                language: {
-                    search: 'Найти:',
-                    searchPlaceholder: "Ведите для поиска"
+        $('#example').DataTable({
+            language: {
+                search: 'Найти:',
+                searchPlaceholder: 'Введите для поиска',
+                lengthMenu: 'Показать _MENU_ записей', // Опция выбора количества записей на странице
+                info: 'Показано _START_ - _END_ из _TOTAL_ записей', // Информация о показанных записях
+                paginate: {
+                    first: 'Первая', // Кнопка "Первая"
+                    last: 'Последняя', // Кнопка "Последняя"
+                    next: 'Следующая', // Кнопка "Следующая"
+                    previous: 'Предыдущая' // Кнопка "Предыдущая"
                 }
             }
-        );
+        });
     });
 </script>
 </html>
 <script src="script.js"></script>
 <script src="popup.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
+
