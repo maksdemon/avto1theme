@@ -27,92 +27,143 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-// Area Chart Example
-var ctx = document.getElementById("myAreaChart");
-var myLineChart = new Chart(ctx, {
-  type: 'line',
+// Создаем контекст для третьего графика
+var canvas3 = document.getElementById('myAreaChart');
+if (canvas3) {
+
+  var avgPrices3 = JSON.parse(canvas3.getAttribute('data-prices3'));
+  var avgDates3 = JSON.parse(canvas3.getAttribute('data-dates3'));
+
+// Преобразование дат в массив объектов Date
+  avgDates3 = avgDates3.map(function (dateString) {
+    return new Date(dateString);
+  });
+
+// Создание третьего графика
+  var ctx3 = canvas3.getContext('2d');
+  var myChart3 = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+      labels: avgDates3,
+      datasets: [{
+        label: 'Средняя цена',
+        data: avgPrices3,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: 'Средняя цена товара со временем',
+        position: 'top',
+        fontSize: 16,
+        padding: 20
+      },
+      scales: {
+        xAxes: [{
+          type: 'time',
+          time: {
+            unit: 'day', // Устанавливаем единицу времени на день
+            displayFormats: {
+              day: 'DD MMM YYYY' // Устанавливаем формат отображения даты
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  })
+}
+;
+
+// Получаем данные для selectedNamemin из атрибутов data-*
+var canvas4 = document.getElementById('myChart4');
+var originalMinPrices4 = JSON.parse(canvas4.getAttribute('data-min-prices'));
+var originalStartDates4 = JSON.parse(canvas4.getAttribute('data-start-dates'));
+
+// Создание четвертого графика (линейный график)
+var ctx4 = canvas4.getContext('2d');
+var myChart4 = new Chart(ctx4, {
+  type: 'line', // Тип графика - линейный
   data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: originalStartDates4,
     datasets: [{
-      label: "Earnings",
-      lineTension: 0.3,
-      backgroundColor: "rgba(78, 115, 223, 0.05)",
-      borderColor: "rgba(78, 115, 223, 1)",
-      pointRadius: 3,
-      pointBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointBorderColor: "rgba(78, 115, 223, 1)",
-      pointHoverRadius: 3,
-      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-      pointHitRadius: 10,
-      pointBorderWidth: 2,
-      data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-    }],
+      label: 'Минимальная цена',
+      data: originalMinPrices4,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1,
+      pointRadius: 5,
+      pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+      fill: true // Заполнение области под линией
+    }]
   },
   options: {
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 25,
-        top: 25,
-        bottom: 0
-      }
+    legend: {
+      display: false
+    },
+    title: {
+      display: true,
+      text: 'Минимальная цена товара со временем (selectedNamemin)',
+      position: 'top',
+      fontSize: 16,
+      padding: 20
     },
     scales: {
       xAxes: [{
+        type: 'time',
         time: {
-          unit: 'date'
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          maxTicksLimit: 7
+          unit: 'day', // Устанавливаем единицу времени на день
+          displayFormats: {
+            day: 'DD MMM YYYY' // Устанавливаем формат отображения даты
+          }
         }
       }],
       yAxes: [{
         ticks: {
-          maxTicksLimit: 5,
-          padding: 10,
-          // Include a dollar sign in the ticks
-          callback: function(value, index, values) {
-            return '$' + number_format(value);
-          }
-        },
-        gridLines: {
-          color: "rgb(234, 236, 244)",
-          zeroLineColor: "rgb(234, 236, 244)",
-          drawBorder: false,
-          borderDash: [2],
-          zeroLineBorderDash: [2]
+          beginAtZero: true
         }
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      titleMarginBottom: 10,
-      titleFontColor: '#6e707e',
-      titleFontSize: 14,
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      intersect: false,
-      mode: 'index',
-      caretPadding: 10,
-      callbacks: {
-        label: function(tooltipItem, chart) {
-          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-        }
-      }
+      }]
     }
   }
+});
+
+// Получаем элементы управления для выбора даты
+var startDateInput = document.getElementById('start-date');
+var endDateInput = document.getElementById('end-date');
+var applyDateRangeButton = document.getElementById('apply-date-range');
+
+// Обработчик нажатия на кнопку "Применить"
+applyDateRangeButton.addEventListener('click', function () {
+  var startDate = new Date(startDateInput.value);
+
+  // Если последняя дата выбрана, используем её; иначе, текущая дата
+  var endDate = endDateInput.value ? new Date(endDateInput.value) : new Date();
+
+  // Фильтруем данные по выбранному диапазону дат
+  var filteredPrices = [];
+  var filteredDates = [];
+
+  for (var i = 0; i < originalStartDates4.length; i++) {
+    var currentDate = new Date(originalStartDates4[i]);
+
+    if (currentDate >= startDate && currentDate <= endDate) {
+      filteredPrices.push(originalMinPrices4[i]);
+      filteredDates.push(originalStartDates4[i]);
+    }
+  }
+
+  // Обновляем данные графика
+  myChart4.data.labels = filteredDates;
+  myChart4.data.datasets[0].data = filteredPrices;
+  myChart4.update();
 });
