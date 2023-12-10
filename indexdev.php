@@ -1,5 +1,33 @@
 <?php
 session_start();
+require('config/config.php');
+$sqlStartDate = "
+SELECT 
+    t.name,
+    t.category,
+    t.min_price,
+    t.max_price,
+     t.avg_price,
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS current_price,
+    (SELECT url FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS last_url
+FROM (
+    SELECT
+        name,
+        category,
+        MIN(price) AS min_price,
+        MAX(price) AS max_price,
+        AVG(price) AS avg_price
+    FROM avto1
+    GROUP BY name, category
+) AS t
+HAVING current_price <= min_price;
+
+";
+$resultStartDate = mysqli_query($mysqli, $sqlStartDate);
+$rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
+$columnNames = array_keys($rowsStartDate[0]);
+
 
 ?>
 <!DOCTYPE html>
@@ -384,7 +412,7 @@ session_start();
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Товары которы выгодны сегодня</h1>
                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                 </div>
@@ -392,108 +420,58 @@ session_start();
                 <!-- Content Row -->
                 <div class="row">
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Earnings (Monthly)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
+                    <?php
+                    foreach ($rowsStartDate as $row): ?>
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-success shadow h-100 py-2">
                             <div class="card-body">
+                                <div class="text-center mb-4">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                        <?php
+                                        echo $row['name']; ?></div>
+                                </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Средняя цена</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
+                                            echo $row['avg_price']; ?></div>
                                     </div>
                                     <div class="col mr-2">
                                         <div  class="col text-xs font-weight-bold text-info text-uppercase mb-1">
                                             Мин цена</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
+                                            echo $row['min_price']; ?></div>
                                     </div>
                                     <div class="col mr-2">
                                         <div  class="col text-xs font-weight-bold text-warning text-uppercase mb-1">
                                             Макс цена</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
+                                            echo $row['max_price']; ?></div>
                                     </div>
                                     <div class="col mr-2">
                                         <div  class="col text-xs font-weight-bold  text-primary text-uppercase mb-1">
                                             Тек цена</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
+                                            echo $row['current_price']; ?></div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
 
+                    <?php
+                                endforeach; ?>
 
 
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="progress progress-sm mr-2">
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                         style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                         aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Pending Requests Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Pending Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
-                <div id="expandCollapseButtons">
-                    <button id="expandButton" class="btn btn-primary mt-4">Развернуть</button>
-                    <button id="collapseButton" class="btn btn-secondary mt-4" style="display: none;">Свернуть</button>
-                </div>
+
 
                 <div id="expandedContent" class="row" style="display: none;">
                     <!-- Дополнительные строки с элементами -->
@@ -635,23 +613,7 @@ session_start();
 
 
                     <!-- Дополнительные строки с элементами -->
-                <script>
-                    const expandButton = document.getElementById('expandButton');
-                    const collapseButton = document.getElementById('collapseButton');
-                    const expandedContent = document.getElementById('expandedContent');
 
-                    expandButton.addEventListener('click', function() {
-                        expandedContent.style.display = 'block';
-                        expandButton.style.display = 'none';
-                        collapseButton.style.display = 'inline-block'; // показать кнопку "Свернуть"
-                    });
-
-                    collapseButton.addEventListener('click', function() {
-                        expandedContent.style.display = 'none';
-                        expandButton.style.display = 'inline-block';
-                        collapseButton.style.display = 'none'; // скрыть кнопку "Свернуть" после сворачивания
-                    });
-                </script>
                 <!-- Content Row -->
                 <div class="row">
 
