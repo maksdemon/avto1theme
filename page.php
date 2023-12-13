@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('config/config.php');
+
 // Установка значения переменных
 $ninetyDaysAgo = date('Y-m-d', strtotime('-90 days'));
 $thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
@@ -62,12 +63,17 @@ if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
 
 
 
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
 echo "<pre>";
-//var_dump($rowsStartDate );
+//var_dump($rowsStartDate1 );
 echo "</pre>";
 
 ?>

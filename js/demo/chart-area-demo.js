@@ -27,26 +27,38 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
+
+var dates = [];
+var avgPrices = [];
+fetch('grafpage.php')
+    .then(response => response.json())
+    .then(data => {
+      // Проход по каждому элементу массива data (полученного из AJAX-запроса)
+      data.forEach(function(row) {
+        dates.push(row['date_day']);
+        avgPrices.push(parseFloat(row['avg_price'])); // Преобразование средней цены в числовой формат
+      });
+
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-  labels: ["Янв", "Фев", "Март", "Апр", "Май", "Июн"],
+  labels: dates,
     datasets: [{
-      label: "Продажи",
+      label: "Средняя цена",
       lineTension: 0.3,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
-      borderColor: "rgba(78, 115, 223, 1)",
+      borderColor: "rgb(105,223,78)",
       pointRadius: 3,
       pointBackgroundColor: "rgba(78, 115, 223, 1)",
       pointBorderColor: "rgba(78, 115, 223, 1)",
       pointHoverRadius: 3,
-      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+      pointHoverBackgroundColor: "rgb(105,223,78)",
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [120, 150, 180, 170, 200, 190],
+      data: avgPrices,
     },
       {
         label: "Прибыль",
@@ -132,8 +144,11 @@ var myLineChart = new Chart(ctx, {
       }
     }
   }
-});
-
+})
+    })
+    .catch(error => {
+      console.error('Ошибка получения данных:', error);
+    });
 
 
 

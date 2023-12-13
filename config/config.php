@@ -6,7 +6,7 @@ $mysqli = new mysqli('62.109.2.72', 'avtoparser', '7xXD2rN9i', 'avto1');
 if ($mysqli->connect_error) {
     echo 'Failed to connect to MySQL: ' . $mysqli->connect_error;
 } else {
-    echo 'Connection established1';
+   // echo 'Connection established1';
 }
 
 
@@ -24,7 +24,7 @@ if ($interval->h < 10) {
     $isLessThan10Hours = 'false';
 }
 
-echo $isLessThan10Hours; // Выводит true или false
+//echo $isLessThan10Hours; // Выводит true или false
 
 
 //для даты min
