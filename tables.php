@@ -450,13 +450,20 @@ $columnNames = array_keys($rowsStartDate[0]);
 
                                         <tr>
                                             <td><a href="<?php echo $row['last_url']; ?>"><?php
-                                                    echo $row['name']; ?></a></td>
+                                                    echo $row['name']; ?></a>
+                                                <a class="popup-link" href="page.php?<?php echo $row['name']; ?>" data-popup data-name="<?php
+                                                echo $row['name']; ?>" data-avgprices="<?php
+                                                echo htmlspecialchars(json_encode($row['avg_price']), ENT_QUOTES, 'UTF-8'); ?>"><img
+                                                            src="img/podr.png" alt="Иконка"></a>
+
+
+                                            </td>
+
                                             <td>
                                                 <a class="popup-link" href="javascript:void(0);" data-popup data-name="<?php
                                                 echo $row['name']; ?>" data-avgprices="<?php
                                                 echo htmlspecialchars(json_encode($row['avg_price']), ENT_QUOTES, 'UTF-8'); ?>"><img
                                                             src="img/img.png" alt="Иконка"></a>
-
                                             </td>
                                             <td><?php
                                                 echo $row['category']; ?></td>
