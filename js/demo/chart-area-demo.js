@@ -30,13 +30,15 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 var dates = [];
 var avgPrices = [];
+var minPrices = [];
 fetch('grafpage.php')
     .then(response => response.json())
     .then(data => {
       // Проход по каждому элементу массива data (полученного из AJAX-запроса)
       data.forEach(function(row) {
-        dates.push(row['date_day']);
-        avgPrices.push(parseFloat(row['avg_price'])); // Преобразование средней цены в числовой формат
+        dates.push(row['start_of_week']);
+        avgPrices.push(parseFloat(row['max_price']));
+        minPrices.push(parseFloat(row['min_price']));// Преобразование средней цены в числовой формат
       });
 
 // Area Chart Example
@@ -46,7 +48,7 @@ var myLineChart = new Chart(ctx, {
   data: {
   labels: dates,
     datasets: [{
-      label: "Средняя цена",
+      label: "максимальная цена",
       lineTension: 0.3,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
       borderColor: "rgb(105,223,78)",
@@ -61,7 +63,7 @@ var myLineChart = new Chart(ctx, {
       data: avgPrices,
     },
       {
-        label: "Прибыль",
+        label: "минимальная цена",
         lineTension: 0.3,
         backgroundColor: "rgba(78, 115, 223, 0.05)",
         borderColor: "rgba(78, 115, 223, 1)",
@@ -73,7 +75,7 @@ var myLineChart = new Chart(ctx, {
         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
         pointHitRadius: 10,
         pointBorderWidth: 2,
-        data: [50, 80, 60, 70, 90, 85],
+        data: minPrices,
       }
 
     ],
@@ -107,7 +109,7 @@ var myLineChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return '$' + number_format(value);
+            return 'BYN' + number_format(value);
           }
         },
         gridLines: {
