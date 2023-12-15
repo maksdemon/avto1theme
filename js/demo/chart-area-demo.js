@@ -27,13 +27,16 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
+var param1 = '<?php echo isset($param1) ? $param1 : "0bd965d14fd96884e5f1f3604f826494"; ?>';
 
+console.log(param1);
 var dates = [];
 var avgPrices = [];
 var minPrices = [];
-fetch('grafpage.php')
+fetch(`http://avto1theme//grafpage.php?id=${param1}`)
     .then(response => response.json())
     .then(data => {
+      console.log(data);
       // Проход по каждому элементу массива data (полученного из AJAX-запроса)
       data.forEach(function(row) {
         dates.push(row['start_of_week']);
@@ -41,6 +44,9 @@ fetch('grafpage.php')
         minPrices.push(parseFloat(row['min_price']));// Преобразование средней цены в числовой формат
       });
 
+      console.log("Dates:", dates);
+      console.log("Avg Prices:", avgPrices);
+      console.log("Min Prices:", minPrices);
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
@@ -141,7 +147,7 @@ var myLineChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': byn' + number_format(tooltipItem.yLabel);
         }
       }
     }
@@ -150,6 +156,7 @@ var myLineChart = new Chart(ctx, {
     })
     .catch(error => {
       console.error('Ошибка получения данных:', error);
+
     });
 
 

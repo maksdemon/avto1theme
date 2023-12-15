@@ -1,34 +1,38 @@
 <?php
 session_start();
 require('config/config.php');
-
+require ('grafpage.php');
+header('Content-Type: text/html');
 // Установка значения переменных
 $ninetyDaysAgo = date('Y-m-d', strtotime('-90 days'));
 $thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
 $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));
 $allTime = '1900-01-01'; // Начальная дата для всего времени
 $sqlStartDate = "
-    SELECT 
-        t.name,
-        t.category,
-        t.min_price,
-        t.max_price,
-        t.avg_price,
-        (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
-        (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS current_price,
-        (SELECT url FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS last_url
-    FROM (
-        SELECT
-            name,
-            category,
-            MIN(price) AS min_price,
-            MAX(price) AS max_price,
-            AVG(price) AS avg_price
-        FROM avto1
-        WHERE date >= ?
-        GROUP BY name, category
-    ) AS t
-    WHERE t.name = 'BOSCH 3397007620';
+SELECT 
+    t.name,
+    t.category,
+    t.unique_id,
+    t.min_price,
+    t.max_price,
+    t.avg_price,
+    (SELECT price FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
+    (SELECT price FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1) AS current_price,
+    (SELECT url FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1) AS last_url
+FROM (
+    SELECT
+        name,
+        category,
+        unique_id,
+        MIN(price) AS min_price,
+        MAX(price) AS max_price,
+        AVG(price) AS avg_price
+    FROM avto1
+    WHERE date >= ?
+    GROUP BY unique_id, name, category
+) AS t
+WHERE t.unique_id = '$param1';
+
 ";
 
 if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
@@ -64,17 +68,17 @@ if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
 
 
 
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
 echo "<pre>";
-//var_dump($rowsStartDate1 );
+
+print_r($rowsStartDate1);
 echo "</pre>";
+echo '<pre>';
+print_r($param1);
+echo '</pre>';
 
 ?>
 <head>
@@ -1001,6 +1005,7 @@ echo "</pre>";
 <script src="js/demo/chart-area-demo.js"></script>
 <script src="js/demo/chart-pie-demo.js"></script>
 
+<div id="js-data" data-param1="<?php echo $param1; ?>"></div>
 </body>
 
 </html>

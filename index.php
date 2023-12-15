@@ -1,5 +1,10 @@
     <?php
-        session_start();
+    require('config/config.php');
+    require ('get.php');
+    echo '<pre>';
+
+    print_r($param1);
+    echo '</pre>';
 
         ?>
 <!DOCTYPE html>

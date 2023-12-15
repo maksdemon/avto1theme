@@ -9,7 +9,6 @@ if ($mysqli->connect_error) {
    // echo 'Connection established1';
 }
 
-
 //последняя дата для иконки
 $sqllastdate = "SELECT DATE FROM avto1 ORDER BY DATE DESC LIMIT 1";
 $resultlastdate = mysqli_query($mysqli, $sqllastdate);
