@@ -27,13 +27,13 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-var param1 = '<?php echo isset($param1) ? $param1 : "0bd965d14fd96884e5f1f3604f826494"; ?>';
+//var param1 = '<?php echo isset($param1) ? $param1 : "0bd965d14fd96884e5f1f3604f826494"; ?>';
 
-console.log(param1);
+console.log(paramd);
 var dates = [];
 var avgPrices = [];
 var minPrices = [];
-fetch(`http://avto1theme//grafpage.php?id=${param1}`)
+fetch(`http://avto1theme//grafpage.php?id=${paramd}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
