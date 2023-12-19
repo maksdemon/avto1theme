@@ -33,13 +33,13 @@ var minPrices = [];
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 console.log(id); // Это будет значение "123" в данном случае
-fetch(`grafdemosql.php`)
+fetch(`grafdemosql.php/grafdemosql.php?id=${encodeURIComponent(id)}`)
     .then(response => response.json())
     .then(data => {
         const paramd = data.paramd; // Получаем значение paramd из полученных данных
         const resultData = data.data; // Получаем данные результата SQL-запроса
         // Используйте переменную paramd и данные resultData в вашем коде
-        console.log(paramd); // Пример вывода переменной paramd в консоль
+        console.log(paramd+" пришло"); // Пример вывода переменной paramd в консоль
         console.log(resultData);
         // Проход по каждому элементу массива data (полученного из AJAX-запроса)
         resultData.forEach(function(row) {
