@@ -1,8 +1,7 @@
 <?php
 session_start();
 require('config/config.php');
-require ('grafpage.php');
-header('Content-Type: text/html');
+$paramd = isset($_GET['id']) ? $_GET['id'] : "0bd965d14fd96884e5f1f3604f826494";
 // Установка значения переменных
 $ninetyDaysAgo = date('Y-m-d', strtotime('-90 days'));
 $thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
@@ -31,7 +30,7 @@ FROM (
     WHERE date >= ?
     GROUP BY unique_id, name, category
 ) AS t
-WHERE t.unique_id = '$param1';
+WHERE t.unique_id = '$paramd';
 
 ";
 
@@ -74,10 +73,10 @@ if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
 <?php
 echo "<pre>";
 
-print_r($rowsStartDate1);
+
 echo "</pre>";
 echo '<pre>';
-print_r($param1);
+print_r($paramd);
 echo '</pre>';
 
 ?>
@@ -736,7 +735,7 @@ echo '</pre>';
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
+                                    <canvas id="myAreaChart1"></canvas>
                                 </div>
                             </div>
                         </div>
