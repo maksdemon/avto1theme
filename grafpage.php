@@ -1,7 +1,7 @@
 <?php
 require('config/config.php');
 $paramd = isset($_GET['id']) ? $_GET['id'] : "0bd965d14fd96884e5f1f3604f826494";
-
+$paramd= urldecode($paramd);
 $sqlStartDated = "
 SELECT
 DATE_FORMAT(MIN(date), '%Y-%m-%d') AS start_of_week,

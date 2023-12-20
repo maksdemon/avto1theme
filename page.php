@@ -1,7 +1,7 @@
 <?php
 session_start();
 require('config/config.php');
-$paramd = isset($_GET['id']) ? $_GET['id'] : "0bd965d14fd96884e5f1f3604f826494";
+
 // Установка значения переменных
 $ninetyDaysAgo = date('Y-m-d', strtotime('-90 days'));
 $thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
@@ -11,26 +11,24 @@ $sqlStartDate = "
 SELECT 
     t.name,
     t.category,
-    t.unique_id,
     t.min_price,
     t.max_price,
     t.avg_price,
-    (SELECT price FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
-    (SELECT price FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1) AS current_price,
-    (SELECT url FROM avto1 WHERE unique_id = t.unique_id ORDER BY date DESC LIMIT 1) AS last_url
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS current_price,
+    (SELECT url FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS last_url
 FROM (
     SELECT
         name,
         category,
-        unique_id,
         MIN(price) AS min_price,
         MAX(price) AS max_price,
         AVG(price) AS avg_price
     FROM avto1
     WHERE date >= ?
-    GROUP BY unique_id, name, category
+    GROUP BY  name, category
 ) AS t
-WHERE t.unique_id = '$paramd';
+WHERE t.name = '$paramd';
 
 ";
 

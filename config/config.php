@@ -1,5 +1,6 @@
 <?php
-
+$paramd = isset($_GET['id']) ? $_GET['id'] : "0bd965d14fd96884e5f1f3604f826494";
+$paramd= urldecode($paramd);
 
 $mysqli = new mysqli('62.109.2.72', 'avtoparser', '7xXD2rN9i', 'avto1');
 

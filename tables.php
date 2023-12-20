@@ -453,10 +453,7 @@ $columnNames = array_keys($rowsStartDate[0]);
                                         <tr>
                                             <td><a href="<?php echo $row['last_url']; ?>"><?php
                                                     echo $row['name']; ?></a>
-                                                <a class="popup-link" href="/grafdemo.php?id=<?php echo $row['unique_id']; ?>" data-popup data-name="<?php
-                                                echo $row['name']; ?>" data-avgprices="<?php
-                                                echo htmlspecialchars(json_encode($row['avg_price']), ENT_QUOTES, 'UTF-8'); ?>"><img
-                                                            src="img/podr.png" alt="Иконка"></a>
+
 
 
                                             </td>
@@ -466,6 +463,8 @@ $columnNames = array_keys($rowsStartDate[0]);
                                                 echo $row['name']; ?>" data-avgprices="<?php
                                                 echo htmlspecialchars(json_encode($row['avg_price']), ENT_QUOTES, 'UTF-8'); ?>"><img
                                                             src="img/img.png" alt="Иконка"></a>
+                                                <a class="popup-link" href="/page.php?id=<?php echo $row['name']; ?>" ><img
+                                                            src="img/podr.png" alt="Иконка"></a>
                                             </td>
                                             <td><?php
                                                 echo $row['category']; ?></td>
