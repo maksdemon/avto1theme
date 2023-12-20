@@ -64,9 +64,6 @@ if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
     $columnNames = array_keys($rowsStartDate90[0]);
 }
 
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +73,7 @@ echo "<pre>";
 
 echo "</pre>";
 echo '<pre>';
-print_r($paramd);
+//print_r($paramd);
 echo '</pre>';
 
 ?>
