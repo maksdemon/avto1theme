@@ -12,7 +12,7 @@ WHERE name = ?;
 // Предполагая, что $mysqli - ваше подключение к базе данных
 $stmt = mysqli_prepare($mysqli, $query);
 if ($stmt) {
-    $name = "ATE 13.0470-2785.2"; // Значение фильтрации
+    $name = "$paramd"; // Значение фильтрации
     mysqli_stmt_bind_param($stmt, "s", $name);
     mysqli_stmt_execute($stmt);
 
