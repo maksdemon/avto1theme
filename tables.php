@@ -6,7 +6,6 @@ SELECT
     t.name,
     t.category,
     t.min_price,
-    t.unique_id,
     (SELECT date FROM avto1 WHERE name = t.name AND price = t.min_price LIMIT 1) AS min_date,
     t.max_price,
     (SELECT date FROM avto1 WHERE name = t.name AND price = t.max_price LIMIT 1) AS max_date,
@@ -18,12 +17,11 @@ FROM (
     SELECT
         name,
         category,
-        unique_id,
         MIN(price) AS min_price,
         MAX(price) AS max_price,
         AVG(price) AS avg_price
     FROM avto1
-    GROUP BY unique_id, name, category
+    GROUP BY  name, category
 ) AS t
 ORDER BY ABS(current_price - min_price);
 
