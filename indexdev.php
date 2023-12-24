@@ -2,22 +2,34 @@
 session_start();
 require('config/config.php');
 $sqlStartDate = "
-SELECT
-            DATE(date) AS date_day,
-            AVG(price) AS avg_price
-        FROM avto1
-        WHERE name = 'BOSCH 3397007620'
-        GROUP BY DATE(date)
+SELECT 
+    t.name,
+    t.category,
+    t.min_price,
+    t.max_price,
+     t.avg_price,
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1 OFFSET 1) AS prev_price,
+    (SELECT price FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS current_price,
+    (SELECT url FROM avto1 WHERE name = t.name ORDER BY date DESC LIMIT 1) AS last_url
+FROM (
+    SELECT
+        name,
+        category,
+        MIN(price) AS min_price,
+        MAX(price) AS max_price,
+        AVG(price) AS avg_price
+    FROM avto1
+    GROUP BY name, category
+) AS t
+HAVING current_price <= min_price;
+
 ";
 $resultStartDate = mysqli_query($mysqli, $sqlStartDate);
 $rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
 $columnNames = array_keys($rowsStartDate[0]);
 
-echo "<pre>";
-var_dump($rowsStartDate );
-echo "</pre>";
 ?>
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 
