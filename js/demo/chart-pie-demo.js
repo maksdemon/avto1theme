@@ -4,7 +4,6 @@ Chart.defaults.global.defaultFontColor = '#858796';
 const params = new URLSearchParams(window.location.search);
 const productId = params.get('id');
 console.log(productId); // Это будет значение "123" в данном случае
-
 fetch(`/availability-days.php?id=${encodeURIComponent(productId)}`)
     .then(response => {
       if (!response.ok) {
