@@ -30,6 +30,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 var dates = [];
 var avgPrices = [];
 var minPrices = [];
+var usd = [];
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 console.log(id); // Это будет значение "123" в данном случае
@@ -45,11 +46,10 @@ fetch(`grafdemosql.php/grafdemosql.php?id=${encodeURIComponent(id)}`)
       resultData.forEach(function(row) {
         dates.push(row['start_of_week']);
         avgPrices.push(parseFloat(row['max_price']));
-        minPrices.push(parseFloat(row['min_price']));// Преобразование средней цены в числовой формат
+        minPrices.push(parseFloat(row['min_price']))
+        usd.push(parseFloat(row['usd']));
       });
-      // console.log("Dates:", dates);
-      // console.log("Avg Prices:", avgPrices);
-      //console.log("Min Prices:", minPrices);
+
 // Area Chart Example
       var ctx = document.getElementById("myAreaChart1");
       var myLineChart = new Chart(ctx, {
@@ -85,6 +85,22 @@ fetch(`grafdemosql.php/grafdemosql.php?id=${encodeURIComponent(id)}`)
               pointHitRadius: 10,
               pointBorderWidth: 2,
               data: minPrices,
+            },
+            {
+              label: "usd",
+              yAxisID: 'usd-axis',
+              lineTension: 0.3,
+              backgroundColor: "rgba(78, 115, 223, 0.05)",
+              borderColor: "rgb(223,78,100)",
+              pointRadius: 3,
+              pointBackgroundColor: "rgb(250,8,45)",
+              pointBorderColor: "rgb(223,78,100)",
+              pointHoverRadius: 3,
+              pointHoverBackgroundColor: "rgb(250,8,45)",
+              pointHoverBorderColor: "rgb(250,8,45)",
+              pointHitRadius: 10,
+              pointBorderWidth: 2,
+              data: usd,
             }
 
           ],
@@ -128,7 +144,23 @@ fetch(`grafdemosql.php/grafdemosql.php?id=${encodeURIComponent(id)}`)
                 borderDash: [2],
                 zeroLineBorderDash: [2]
               }
-            }],
+            },
+              {
+                id: 'usd-axis',
+                type: 'linear',
+                position: 'right',
+                ticks: {
+                  // настройки для оси Y с учетом данных usd
+                  suggestedMin: Math.min(...usd),
+                  suggestedMax: Math.max(...usd),
+                  callback: function(value, index, values) {
+                    return 'USD ' + value.toFixed(2); // формат для отображения значения usd
+                  }
+                },
+                gridLines: {
+                  drawOnChartArea: false // чтобы избежать наложения на основную область графика
+                }
+              }],
           },
           legend: {
             display: false

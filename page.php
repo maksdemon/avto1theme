@@ -761,6 +761,7 @@ echo '</pre>';
                             <div class="card-body">
                                 <div class="chart-pie pt-4 pb-2">
                                     <canvas id="myPieChart"></canvas>
+                                    <div id="centerText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px;"></div>
                                 </div>
                                 <div class="mt-4 text-center small">
                                         <span class="mr-2">
@@ -999,6 +1000,8 @@ echo '</pre>';
 <script src="js/demo/chart-pie-demo.js"></script>
 
 <div id="js-data" data-param1="<?php echo $param1; ?>"></div>
+
+
 </body>
 
 </html>

@@ -454,8 +454,6 @@ $columnNames = array_keys($rowsStartDate[0]);
                                             <td><a href="<?php echo $row['last_url']; ?>"><?php
                                                     echo $row['name']; ?></a>
 
-
-
                                             </td>
 
                                             <td>
