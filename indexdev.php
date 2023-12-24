@@ -1,7 +1,7 @@
 <?php
 session_start();
 require('config/config.php');
-$sqlStartDate = "
+$sqlStartDate = " 
 SELECT 
     t.name,
     t.category,
