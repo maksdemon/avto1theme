@@ -48,22 +48,34 @@ var myBarChart = new Chart(ctx, {
   data: {
     labels: data.map(item => item.day),
     datasets: [{
-      label: "Min Price",
+      label: "Min and Max Prices",
       backgroundColor: "#4e73df",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: minPrices,
-      maxBarThickness: 25,
-
+      data: data.map(item => ({
+        x: item.day,
+        y: Math.max(item.min_price, item.max_price),
+        min_price: item.min_price,
+        max_price: item.max_price
+      })),
     },
       {
-      label: "Max Price",
-      backgroundColor: "#1cc88a",
-      hoverBackgroundColor: "#17a673",
-      borderColor: "#1cc88a",
+        label: "Min Price",
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        data: minPrices,
+        hidden: true // Hide the dataset to only show the new bar
+      },
+      {
+        label: "Max Price",
+        backgroundColor: "#1cc88a",
+        hoverBackgroundColor: "#17a673",
+        borderColor: "#1cc88a",
         data: maxPrices,
-        maxBarThickness: 25,
-    }],
+        hidden: true // Hide the dataset to only show the new bar
+      }
+    ],
   },
   options: {
     maintainAspectRatio: false,
