@@ -30,6 +30,28 @@ FROM (
 WHERE t.name = '$paramd';
 
 ";
+$sqlStartDateusd = "
+SELECT
+     a.name AS name,
+    MIN(a.date) AS first_date,
+    MAX(a.date) AS last_date,
+    MIN(a.price) AS min_price,
+    MAX(a.price) AS last_price,
+     DATEDIFF(NOW(), MIN(a.date)) AS days_since_first_date,
+    ROUND(MIN(a.price / c.currency), 3) AS min_price_usd,
+    ROUND(MAX(a.price / c.currency), 3) AS last_price_usd,
+    ROUND(((MAX(a.price / c.currency) - MIN(a.price / c.currency)) / MIN(a.price / c.currency)) * 100, 2) AS price_change_percent_usd,
+    ROUND(((MAX(a.price) - MIN(a.price)) / MIN(a.price)) * 100, 2) AS price_change_percent
+FROM
+    avto1 a
+JOIN
+    curdate c ON DATE_FORMAT(a.date, '%Y-%m-%d') = DATE_FORMAT(c.date_curdate, '%Y-%m-%d')
+WHERE
+    a.name = '$paramd'
+GROUP BY
+    a.name;
+";
+
 
 if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
     mysqli_stmt_bind_param($stmt, "s", $allTime); // "s" для строки
@@ -39,13 +61,14 @@ if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
     $columnNames = array_keys($rowsStartDate[0]);
 
 }
-if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
-    mysqli_stmt_bind_param($stmt, "s", $sevenDaysAgo ); // "s" для строки
-    mysqli_stmt_execute($stmt);
-    $resultStartDate7 = mysqli_stmt_get_result($stmt);
-    $rowsStartDate7 = mysqli_fetch_all($resultStartDate7, MYSQLI_ASSOC);
-    $columnNames = array_keys($rowsStartDate7[0]);
+$rowsStartDateusd = [];
+if ($resultStartDateusd = mysqli_query($mysqli, $sqlStartDateusd)) {
+    $rowsStartDateusd = mysqli_fetch_all($resultStartDateusd, MYSQLI_ASSOC);
+ //   var_dump($rowsStartDateusd);
+} else {
+    echo "Ошибка выполнения запроса: " . mysqli_error($mysqli);
 }
+
 if ($stmt = mysqli_prepare($mysqli, $sqlStartDate)) {
     mysqli_stmt_bind_param($stmt, "s", $thirtyDaysAgo ); // "s" для строки
     mysqli_stmt_execute($stmt);
@@ -594,41 +617,36 @@ echo '</pre>';
                     <?php
                     endforeach; ?>
                     <?php
-                    foreach ($rowsStartDate7 as $row): ?>
+                    foreach ($rowsStartDateusd as $row): ?>
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="text-center mb-4">
-                                        <div class="text-xs font-weight-bold text-uppercase mb-1">За 7 дней
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1">Динамика цены
                                             <?php
                                             echo $row['name']; ?></div>
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Средняя цена</div>
+                                                Дин usd</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
-                                                echo $row['avg_price']; ?></div>
+                                                echo $row['price_change_percent_usd']; ?> %</div>
                                         </div>
                                         <div class="col mr-2">
                                             <div  class="col text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Мин цена</div>
+                                                Дин byn</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
-                                                echo $row['min_price']; ?></div>
+                                                echo $row['price_change_percent']; ?> %</div>
                                         </div>
                                         <div class="col mr-2">
                                             <div  class="col text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Макс цена</div>
+                                               За дней</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
-                                                echo $row['max_price']; ?></div>
+                                                echo $row['days_since_first_date']; ?></div>
                                         </div>
-                                        <div class="col mr-2">
-                                            <div  class="col text-xs font-weight-bold  text-primary text-uppercase mb-1">
-                                                Тек цена</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php
-                                                echo $row['current_price']; ?></div>
-                                        </div>
+
                                     </div>
 
                                 </div>
