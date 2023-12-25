@@ -799,7 +799,24 @@ echo '</pre>';
 
 
                 <!-- Дополнительные строки с элементами -->
-
+                <div class="row">
+                    <div class="col-xl-12 col-lg-7">
+                        <!-- Bar Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
+                                </div>
+                                <hr>
+                                Styling for the bar chart can be found in the
+                                <code>/js/demo/chart-bar-demo.js</code> file.
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Content Row -->
                 <div class="row">
 
@@ -1016,7 +1033,7 @@ echo '</pre>';
 <!-- Page level custom scripts -->
 <script src="js/demo/chart-area-demo.js"></script>
 <script src="js/demo/chart-pie-demo.js"></script>
-
+<script src="js/demo/chart-bar-demo.js"></script>
 <div id="js-data" data-param1="<?php echo $param1; ?>"></div>
 
 
