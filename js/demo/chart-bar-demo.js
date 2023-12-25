@@ -33,113 +33,116 @@ fetch(`/barsql.php?id=${encodeURIComponent(productId)}`)
         throw new Error('Network response was not ok');
       }
       return rowssqlbar.json();
-
     })
     .then(data => {
       const labels = data.map(item => item.day);
       const minPrices = data.map(item => item.min_price);
       const maxPrices = data.map(item => item.max_price);
-console.log(data);
-      console.log(minPrices);
-// Bar Chart Example
-var ctx = document.getElementById("myBarChart");
-var myBarChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: data.map(item => item.day),
-    datasets: [{
-      label: "Min and Max Prices",
-      backgroundColor: "#4e73df",
-      hoverBackgroundColor: "#2e59d9",
-      borderColor: "#4e73df",
-      data: data.map(item => ({
-        x: item.day,
-        y: Math.max(item.min_price, item.max_price),
-        min_price: item.min_price,
-        max_price: item.max_price
-      })),
-    },
-      {
-        label: "Min Price",
-        backgroundColor: "#4e73df",
-        hoverBackgroundColor: "#2e59d9",
-        borderColor: "#4e73df",
-        data: minPrices,
-        hidden: true // Hide the dataset to only show the new bar
-      },
-      {
-        label: "Max Price",
-        backgroundColor: "#1cc88a",
-        hoverBackgroundColor: "#17a673",
-        borderColor: "#1cc88a",
-        data: maxPrices,
-        hidden: true // Hide the dataset to only show the new bar
-      }
-    ],
-  },
-  options: {
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 25,
-        top: 25,
-        bottom: 0
-      }
-    },
-    scales: {
-      x: {
-        time: {
-          unit: 'month'
+//console.log(data);      // Calculate average prices between min and max
+
+      const avgPrices = minPrices.map((min, index) => {
+        const minPrice = parseFloat(min);
+        const maxPrice = parseFloat(maxPrices[index]);
+        return Math.round((minPrice + maxPrice) / 2);
+      });
+
+      console.log(avgPrices);
+      const ctx = document.getElementById("myBarChart");
+      const myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Min Price',
+            backgroundColor: "#4e73df",
+            hoverBackgroundColor: "#2e59d9",
+            borderColor: "#4e73df",
+            data: minPrices,
+            hidden: true // Hide Min Price dataset by default
+          },
+            {
+              label: 'Max Price',
+              backgroundColor: "#1cc88a",
+              hoverBackgroundColor: "#17a673",
+              borderColor: "#1cc88a",
+              data: maxPrices,
+              hidden: true // Hide Max Price dataset by default
+            },
+            {
+              label: 'Average Price',
+              backgroundColor: "#36b9cc",
+              hoverBackgroundColor: "#2c9faf",
+              borderColor: "#36b9cc",
+              data: avgPrices,
+            }]
         },
-        grid: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          maxTicksLimit: 6
+        options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 10,
+              right: 25,
+              top: 25,
+              bottom: 0
+            }
+          },
+          scales: {
+            x: {
+              time: {
+                unit: 'month'
+              },
+              grid: {
+                display: false,
+                drawBorder: false
+              },
+              ticks: {
+                maxTicksLimit: 6
+              }
+            },
+            y: {
+              ticks: {
+                min: 0,
+                max: Math.max(...maxPrices),
+                maxTicksLimit: 5,
+                padding: 10,
+                callback: function(value, index, values) {
+                  return 'byn' + number_format(value);
+                }
+              },
+              grid: {
+                color: "rgb(234, 236, 244)",
+                zeroLineColor: "rgb(234, 236, 244)",
+                drawBorder: false,
+                borderDash: [2],
+                zeroLineBorderDash: [2]
+              }
+            }
+          },
+          legend: {
+            display: true
+          },
+          tooltips: {
+            titleMarginBottom: 10,
+            titleFontColor: '#6e707e',
+            titleFontSize: 14,
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            caretPadding: 10,
+            callbacks: {
+              label: function(tooltipItem, chart) {
+                var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                return datasetLabel + ': byn' + number_format(tooltipItem.yLabel);
+              }
+            }
+          },
         }
-      },
-      y: {
-        ticks: {
-          min: 0,
-          max: 15000,
-          maxTicksLimit: 5,
-          padding: 10,
-          callback: function(value, index, values) {
-            return 'byn' + number_format(value);
-          }
-        },
-        grid: {
-          color: "rgb(234, 236, 244)",
-          zeroLineColor: "rgb(234, 236, 244)",
-          drawBorder: false,
-          borderDash: [2],
-          zeroLineBorderDash: [2]
-        }
-      }
-    },
-    legend: {
-      display: true
-    },
-    tooltips: {
-      titleMarginBottom: 10,
-      titleFontColor: '#6e707e',
-      titleFontSize: 14,
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      caretPadding: 10,
-      callbacks: {
-        label: function(tooltipItem, chart) {
-          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': byn' + number_format(tooltipItem.yLabel);
-        }
-      }
-    },
-  }
-})})
+      });
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
