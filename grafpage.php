@@ -1,6 +1,6 @@
 <?php
 require('config/config.php');
-
+require('config/session.php');
 $sqlStartDated = "
 SELECT
 DATE_FORMAT(MIN(date), '%Y-%m-%d') AS start_of_week,

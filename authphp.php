@@ -1,15 +1,12 @@
 <?php
 // Начать сессию
-
 session_start();
-
 // Установить значение переменной сессии
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["fname"]) && isset($_POST["pas"])) {
         $fname = $_POST["fname"];
         $password = $_POST["pas"];
-
         // Подключение к базе данных
         $pdo = new mysqli('62.109.2.72', 'avtoparser', '7xXD2rN9i', 'avto1');
 
@@ -47,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                     echo "Вы успешно авторизованы!";
-                    header("Location: /");
+                    header("Location: /indexdev.php");
                     // Редирект на другую страницу или выполнение других действий после успешной авторизации
                 } else {
                     echo "Неправильное имя пользователя или пароль!";

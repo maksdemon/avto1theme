@@ -1,11 +1,14 @@
 <?php
 //require('grafdemosql.php');
+require('config/session.php');
 require('config/config.php');
 $today = date("Y-m-d");
 //$url = "https://api.nbrb.by/ExRates/Rates/Dynamics/431?startDate=2023-01-01&endDate=2023-12-24";
-$url = "https://api.nbrb.by/ExRates/Rates/Dynamics/431?startDate=2023-01-01&endDate=$today";
+$url = "https://api.nbrb.by/ExRates/Rates/Dynamics/431?startDate=2024-01-01&endDate=$today";
 //$url = "https://api.nbrb.by/ExRates/Rates/Dynamics/431?startDate=" . urlencode($firstDate) . "&endDate=" . urlencode($lastDate);
-
+echo "<pre>";
+echo ($today);
+echo "</pre>";
 $data = file_get_contents($url);
 /*
 if ($data !== false) {

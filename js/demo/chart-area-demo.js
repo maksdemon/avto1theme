@@ -33,8 +33,8 @@ var minPrices = [];
 var usd = [];
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
-//console.log(id); // Это будет значение "123" в данном случае
-fetch(`grafdemosql.php/grafdemosql.php?id=${encodeURIComponent(id)}`)
+console.log(id); // Это будет значение "123" в данном случае
+fetch(`grafdemosql.php?id=${encodeURIComponent(id)}`)
     .then(response => response.json())
     .then(data => {
       const paramd = data.paramd; // Получаем значение paramd из полученных данных
