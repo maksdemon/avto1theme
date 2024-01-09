@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                     echo "Вы успешно авторизованы!";
-                    header("Location: /indexdev.php");
+                    header("Location: /index.php");
                     // Редирект на другую страницу или выполнение других действий после успешной авторизации
                 } else {
                     echo "Неправильное имя пользователя или пароль!";

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const productName = link.getAttribute("data-name");
 
             // Выполняем запрос к вашему PHP-скрипту
-            fetch(`http://avto1theme//your_php_script.php?product=${encodeURIComponent(productName)}`)
+            fetch(`/your_php_script.php?product=${encodeURIComponent(productName)}`)
                 .then(response => response.json())
                 .then(data => {
                     // Создаем попап-контейнер и контент (попап-окно)
