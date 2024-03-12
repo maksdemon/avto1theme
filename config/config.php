@@ -10,6 +10,10 @@ if ($mysqli->connect_error) {
    // echo 'Connection established1';
 }
 
+$sqlcategory="SELECT * FROM category";
+$resultsqlcat = mysqli_query($mysqli, $sqlcategory);
+$rowsqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
+
 //последняя дата для иконки
 $sqllastdate = "SELECT DATE FROM avto1 ORDER BY DATE DESC LIMIT 1";
 $resultlastdate = mysqli_query($mysqli, $sqllastdate);

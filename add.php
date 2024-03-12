@@ -18,6 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors["url"] = "Invalid URL format";
         }
     }
+    if (!empty($_POST["select_id"])) {
+        $errors["url"] = "URL is required";
+    }
 
     // Проверка поля заметок
     if (!empty($_POST["notes"])) {
@@ -33,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //   echo $insertQuery;
             echo "URL успешно добавлен!";
             // echo($errors);
-            header("Location: pie.php");
+            header("Location: tables.php");
             //echo($insertQuery);
         } else {
             // Ошибка при добавлении
@@ -142,25 +145,30 @@ echo '</pre>';
 
                                                         <div class="mb-3">
                                                             <label for="url">url</label>
-
                                                             <input class="areas form-control form-control-solid" id="url" type="url" name="url" placeholder="URL" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url']) : ''; ?>"/>
-                                                        </div><!--
+                                                        </div>
                                                         <div class="mb-3">
-                                                            <label for="exampleFormControlSelect1">Example select</label>
-                                                            <select class="form-control form-control-solid" id="exampleFormControlSelect1">
-                                                                <option>1</option>
-                                                                <option>2</option>
-                                                                <option>3</option>
-                                                                <option>4</option>
-                                                                <option>5</option>
+
+                                                            <label for="exampleFormControlSelect1">Принадлежность php</label>
+                                                            <select class="form-control form-control-solid" id="exampleFormControlSelect1" name="select_id">
+
+                                                                <?php
+                                                                foreach ($rowsqlcat as $row): ?>
+                                                                    <option value="<?= $row["brand_id"] ?>">
+                                                                        <?= $rows["brand"]; ?>
+                                                                    </option>
+                                                                <?php
+                                                                endforeach; ?>
                                                             </select>
                                                         </div>
--->                                                        <div class="mb-0">
+
+                                                    <div class="mb-0">
                                                             <label for="notes">Example textarea</label>
                                                             <!--  <textarea class="form-control form-control-solid" id="exampleFormControlTextarea1" rows="3"></textarea>-->
                                                             <textarea class="form-control form-control-solid" name="notes" rows="3" cols="50" id="notes"><?php   echo $notes; ?></textarea>
                                                             <br><br>
                                                         </div>
+
 
                                                 </div>
                                                 <div class="sbp-preview-code">
