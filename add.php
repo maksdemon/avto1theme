@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (!empty($_POST["select_id"])) {
-        $errors["url"] = "URL is required";
+        $idcat = test_input($_POST["select_id"]);
     }
 
     // Проверка поля заметок
@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Если нет ошибок, можно выполнять дополнительные действия, например, сохранение в базе данных
     if (empty($errors)) {
-        $insertQuery = "INSERT INTO unput (urls,descr) VALUES ('$url', '$notes')";
+        $insertQuery = "INSERT INTO unput (urls,descr,cat) VALUES ('$url', '$notes','$idcat')";
         if (mysqli_query($mysqli, $insertQuery)) {
             // Успешное добавление
-            $url = $notes = "";
+            $idcat= $url = $notes = "";
             //   echo $insertQuery;
             echo "URL успешно добавлен!";
             // echo($errors);
@@ -155,7 +155,7 @@ echo '</pre>';
                                                                 <?php
                                                                 foreach ($rowsqlcat as $row): ?>
                                                                     <option value="<?= $row["brand_id"] ?>">
-                                                                        <?= $rows["brand"]; ?>
+                                                                        <?= $row["brand"]; ?>
                                                                     </option>
                                                                 <?php
                                                                 endforeach; ?>
