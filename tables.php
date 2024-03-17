@@ -2,9 +2,14 @@
 
 require('config/session.php');
 require('config/config.php');
+require('get.php');
+$sqlcat="SELECT * FROM category";
+$statusFilter = isset($_GET['status-filter']) ? $_GET['status-filter'] : null;
+$currentFilterValue = '';
 $sqlStartDate = "
 SELECT 
     t.name,
+    t.model,
     t.category,
     t.min_price,
     (SELECT date FROM avto1 WHERE name = t.name AND price = t.min_price LIMIT 1) AS min_date,
@@ -18,18 +23,24 @@ FROM (
     SELECT
         name,
         category,
+        model,
         MIN(price) AS min_price,
         MAX(price) AS max_price,
         AVG(price) AS avg_price
     FROM avto1
+    WHERE " . ($modelValue ? "model = $modelValue" : "1") . "
     GROUP BY  name, category
 ) AS t
 ORDER BY ABS(current_price - min_price);
-
 ";
+$resultsqlcat = mysqli_query($mysqli, $sqlcat);
+$rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
 $resultStartDate = mysqli_query($mysqli, $sqlStartDate);
 $rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
 $columnNames = array_keys($rowsStartDate[0]);
+
+
+
 
 ?>
 
@@ -103,7 +114,17 @@ $columnNames = array_keys($rowsStartDate[0]);
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4 ">
                         <div class="card-header py-3">
+
                             <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            <form method="GET" action="">
+                                <select name="status-filter" id="status-filter">
+                                    <?php foreach ($rowssqlcat as $row): ?>
+                                        <option value="<?php echo $row['brand_id']; ?>" <?php echo ($row['brand_id'] == $statusFilter) ? 'selected' : ''; ?>><?php echo $row['brand']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit" name="submit" value="submit">Выполнить</button>
+                            </form>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -125,13 +146,10 @@ $columnNames = array_keys($rowsStartDate[0]);
                                     <tbody>
                                     <?php
                                     foreach ($rowsStartDate as $row): ?>
-
                                         <tr>
                                             <td><a href="<?php echo $row['last_url']; ?>"><?php
                                                     echo $row['name']; ?></a>
-
                                             </td>
-
                                             <td>
                                                 <a class="popup-link" href="javascript:void(0);" data-popup data-name="<?php
                                                 echo $row['name']; ?>" data-avgprices="<?php
@@ -166,10 +184,8 @@ $columnNames = array_keys($rowsStartDate[0]);
                                 <div class="date-picker">
                                     <label for="start-date">Начальная дата:</label>
                                     <input type="date" id="start-date" name="start-date">
-
                                     <label for="end-date">Конечная дата:</label>
                                     <input type="date" id="end-date" name="end-date">
-
                                     <button id="apply-date-range">Применить</button>
                                 </div>
 
@@ -266,6 +282,14 @@ $columnNames = array_keys($rowsStartDate[0]);
                     previous: 'Предыдущая' // Кнопка "Предыдущая"
                 }
             }
+        });
+        // Добавляем кнопку фильтрации
+        var filterButton = $('<button>Фильтр модели </button>')
+            .insertAfter($('#example_wrapper .dataTables_length'));
+
+        // Обработчик события для кнопки
+        filterButton.on('click', function() {
+            table.column(2).search('Активный').draw();
         });
     });
 </script>

@@ -19,7 +19,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (!empty($_POST["select_id"])) {
-        $idcat = test_input($_POST["select_id"]);
+        if ($_POST["select_id"] == "new" && !empty($_POST["new_brand"])) {
+            // Добавление новой записи в категорию
+            $new_brand = test_input($_POST["new_brand"]);
+            $insertCategoryQuery = "INSERT INTO category (brand) VALUES ('$new_brand')";
+            if (mysqli_query($mysqli, $insertCategoryQuery)) {
+                $idcat = mysqli_insert_id($mysqli); // Получаем ID только что добавленной записи
+
+                // Добавление URL с использованием ID новой категории
+                $insertUrlQuery = "INSERT INTO unput (urls, descr, cat) VALUES ('$url', '$notes', '$idcat')";
+                if (mysqli_query($mysqli, $insertUrlQuery)) {
+                    // Успешное добавление URL
+                    $idcat = $url = $notes = "";
+                    echo "URL успешно добавлен!";
+                    header("Location: tables.php");
+                } else {
+                    // Ошибка при добавлении URL
+                    echo "Ошибка при добавлении URL: " . mysqli_error($mysqli);
+                }
+            } else {
+                // Ошибка при добавлении новой категории
+                echo "Ошибка при добавлении новой категории: " . mysqli_error($mysqli);
+            }
+        } else {
+            // Использование уже существующей категории
+            $idcat = test_input($_POST["select_id"]);
+            $insertQuery = "INSERT INTO unput (urls, descr, cat) VALUES ('$url', '$notes', '$idcat')";
+            if (mysqli_query($mysqli, $insertQuery)) {
+                // Успешное добавление
+                $idcat = $url = $notes = "";
+                echo "URL успешно добавлен!";
+                header("Location: tables.php");
+            } else {
+                // Ошибка при добавлении URL
+                echo "Ошибка при добавлении URL: " . mysqli_error($mysqli);
+            }
+        }
     }
 
     // Проверка поля заметок
@@ -29,27 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Если нет ошибок, можно выполнять дополнительные действия, например, сохранение в базе данных
     if (empty($errors)) {
-        $insertQuery = "INSERT INTO unput (urls,descr,cat) VALUES ('$url', '$notes','$idcat')";
-        if (mysqli_query($mysqli, $insertQuery)) {
-            // Успешное добавление
-            $idcat= $url = $notes = "";
-            //   echo $insertQuery;
-            echo "URL успешно добавлен!";
-            // echo($errors);
-            header("Location: tables.php");
-            //echo($insertQuery);
-        } else {
-            // Ошибка при добавлении
-            echo "Ошибка при добавлении URL: " . mysqli_error($mysqli);
-        }
-        // echo(mysqli_error($mysqli));
-
-
-        //print_r($errors);
-        ;
+        // Остальной код сохранения данных в базу...
     }
     print_r($errors);
 }
+
 // Функция для обработки введенных данных
 function test_input($data)
 {
@@ -159,7 +178,10 @@ echo '</pre>';
                                                                     </option>
                                                                 <?php
                                                                 endforeach; ?>
+                                                                <option value="new">Добавить новую запись</option>
                                                             </select>
+                                                            <input type="text" name="new_brand" id="new_brand" placeholder="Введите новое название" style="display: none;">
+
                                                         </div>
 
                                                     <div class="mb-0">
@@ -250,7 +272,17 @@ echo '</pre>';
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
+    <script>
+        document.getElementById('exampleFormControlSelect1').addEventListener('change', function() {
+            var newBrandInput = document.getElementById('new_brand');
+            if (this.value === 'new') {
+                newBrandInput.style.display = 'inline-block';
+                newBrandInput.focus();
+            } else {
+                newBrandInput.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>
