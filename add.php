@@ -1,13 +1,20 @@
 <?php
-
+session_start();
 require('config/config.php');
-
+require('config/session.php');
+print_r($_SESSION['id']);
 
 // Переменные для хранения значений полей
 $url = $notes = "";
 $insertQuery = "";
 $errors = array();
+$iduser=$_SESSION['id'];
 // Обработка отправленной формы
+// Проверка поля заметок
+if (!empty($_POST["notes"])) {
+    $notes = test_input($_POST["notes"]);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Проверка поля URL
     if (empty($_POST["url"])) {
@@ -27,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $idcat = mysqli_insert_id($mysqli); // Получаем ID только что добавленной записи
 
                 // Добавление URL с использованием ID новой категории
-                $insertUrlQuery = "INSERT INTO unput (urls, descr, cat) VALUES ('$url', '$notes', '$idcat')";
+                $insertUrlQuery = "INSERT INTO unput (urls, descr, cat,userunput) VALUES ('$url', '$notes', '$idcat','$iduser')";
                 if (mysqli_query($mysqli, $insertUrlQuery)) {
                     // Успешное добавление URL
-                    $idcat = $url = $notes = "";
+                    $idcat = $url =$userunput= $notes = "";
                     echo "URL успешно добавлен!";
                     header("Location: tables.php");
                 } else {
@@ -44,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Использование уже существующей категории
             $idcat = test_input($_POST["select_id"]);
-            $insertQuery = "INSERT INTO unput (urls, descr, cat) VALUES ('$url', '$notes', '$idcat')";
+            $insertQuery = "INSERT INTO unput (urls, descr, cat,userunput) VALUES ('$url', '$notes', '$idcat','$iduser')";
             if (mysqli_query($mysqli, $insertQuery)) {
                 // Успешное добавление
                 $idcat = $url = $notes = "";
@@ -57,10 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Проверка поля заметок
-    if (!empty($_POST["notes"])) {
-        $notes = test_input($_POST["notes"]);
-    }
 
     // Если нет ошибок, можно выполнять дополнительные действия, например, сохранение в базе данных
     if (empty($errors)) {

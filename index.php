@@ -31,9 +31,7 @@ $columnNames = array_keys($rowsStartDate[0]);
 
 
 // Переменная $ _SESSION является ассоциативным массивом, содержащим данные сессии
-foreach ($_SESSION as $key => $value) {
-    echo $key . ' => ' . $value . '<br>';
-}
+
 
 ?>
 
