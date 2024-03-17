@@ -16,14 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Подготовленный запрос для получения пароля пользователя
-        $stmt = $pdo->prepare("SELECT password FROM user WHERE name = ?");
+        $stmt = $pdo->prepare("SELECT id,password FROM user WHERE name = ?");
         if ($stmt) {
             $stmt->bind_param("s", $fname);
             $stmt->execute();
             $stmt->store_result(); // Для получения количества строк
 
             if ($stmt->num_rows == 1) {
-                $stmt->bind_result($hashed_password);
+                $stmt->bind_result($id,$hashed_password);
                 $stmt->fetch();
 
                 // Вывод данных для отладки
@@ -35,8 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (password_verify($password, $hashed_password)) {
 
                     $_SESSION['username'] = $fname;
+                    $_SESSION['id'] = $id;
                     if (isset($_SESSION['username'])) {
                         $username = $_SESSION['username'];
+                        $iduser = $_SESSION['id'];
                         echo "Имя пользователя: $username";
                     } else {
                         echo "Сессия не содержит имени пользователя";

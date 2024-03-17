@@ -29,6 +29,12 @@ $resultStartDate = mysqli_query($mysqli, $sqlStartDate);
 $rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
 $columnNames = array_keys($rowsStartDate[0]);
 
+
+// Переменная $ _SESSION является ассоциативным массивом, содержащим данные сессии
+foreach ($_SESSION as $key => $value) {
+    echo $key . ' => ' . $value . '<br>';
+}
+
 ?>
 
 <!DOCTYPE html>
