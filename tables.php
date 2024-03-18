@@ -1,11 +1,28 @@
 <?php
-
+session_start();
 require('config/session.php');
 require('config/config.php');
 require('get.php');
-$sqlcat="SELECT * FROM category";
+$sqlcat="SELECT * FROM category ";
 $statusFilter = isset($_GET['status-filter']) ? $_GET['status-filter'] : null;
 $currentFilterValue = '';
+$rowsStartDate = array(
+    array(
+        "name" => "Item 1",
+        "model" => "Model 1",
+        "category" => "Category 1"
+    ),
+    array(
+        "name" => "Item 2",
+        "model" => "Model 2",
+        "category" => "Category 2"
+    ),
+    array(
+        "name" => "Item 3",
+        "model" => "Model 3",
+        "category" => "Category 3"
+    )
+);
 $sqlStartDate = "
 SELECT 
     t.name,
@@ -29,16 +46,17 @@ FROM (
         AVG(price) AS avg_price
     FROM avto1
     WHERE " . ($modelValue ? "model = $modelValue" : "1") . "
+    AND user = $id_user
     GROUP BY  name, category
 ) AS t
 ORDER BY ABS(current_price - min_price);
 ";
+
 $resultsqlcat = mysqli_query($mysqli, $sqlcat);
 $rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
 $resultStartDate = mysqli_query($mysqli, $sqlStartDate);
 $rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
-$columnNames = array_keys($rowsStartDate[0]);
-
+//$columnNames = array_keys($rowsStartDate[0]);
 
 
 

@@ -5,3 +5,8 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php"); // Замените "login.php" на страницу вашей авторизации
     exit();
 }
+else{
+     $fname =$_SESSION['username']  ;
+    $id_user=$_SESSION['id'];
+    //$id_user=1;
+}

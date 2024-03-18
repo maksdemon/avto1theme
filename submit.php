@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     if ($insert_stmt->affected_rows > 0) {
                         echo "Пользователь успешно добавлен!";
+                        header("Location: /index.php");
                     } else {
                         echo "Ошибка при добавлении пользователя!";
                     }
