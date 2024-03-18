@@ -3,7 +3,7 @@ session_start();
 require('config/session.php');
 require('config/config.php');
 require('get.php');
-$sqlcat="SELECT * FROM category ";
+$sqlcat="SELECT * FROM category  WHERE  user = $id_user ";
 $statusFilter = isset($_GET['status-filter']) ? $_GET['status-filter'] : null;
 $currentFilterValue = '';
 $rowsStartDate = array(
@@ -53,7 +53,23 @@ ORDER BY ABS(current_price - min_price);
 ";
 
 $resultsqlcat = mysqli_query($mysqli, $sqlcat);
-$rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
+
+
+if (!$resultsqlcat){
+    $rowssqlcat=array(
+        array(
+            'brand_id' => 0,
+            'brand' => 'oll'
+        )
+    );;
+  //  $rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
+}
+else{
+    $rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
+}
+
+//$rowssqlcat = mysqli_fetch_all($resultsqlcat, MYSQLI_ASSOC);
+
 $resultStartDate = mysqli_query($mysqli, $sqlStartDate);
 $rowsStartDate = mysqli_fetch_all($resultStartDate, MYSQLI_ASSOC);
 //$columnNames = array_keys($rowsStartDate[0]);
